@@ -5,7 +5,7 @@ import com.hello.animalChat.Enum.LoginType;
 
 import org.springframework.stereotype.Repository;
 import com.hello.animalChat.domain.Member;
-import com.hello.animalChat.dto.MemberUpdateDto;
+import com.hello.animalChat.dto.UpdateMemberSettingDto;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -33,7 +33,7 @@ public class MemberRepository {
     //이메일을 통한 정보 등록 확인
     public Optional<Member> findByEmail(String email , LoginType type){
         try{
-            String jpql = "SELECT u FROM User u WHERE u.email = :email AND u.loginType = :type";
+            String jpql = "SELECT u FROM Member u WHERE u.email = :email AND u.loginType = :type";
             Member user = em.createQuery(jpql, Member.class)
                 .setParameter("email", email) // 🔥 안전한 바인딩
                 .setParameter("type", type)
@@ -45,10 +45,14 @@ public class MemberRepository {
         }
     }
 
-    public void updateMember(Long memberId , MemberUpdateDto dto){
+    public void updateMemberSetting(Long memberId , UpdateMemberSettingDto dto){
         Member findUser = em.find(Member.class , memberId);
-        Member updataeUSer = new Member(findUser.getId() , findUser.getLoginType() , dto.getEmail() , dto.getPassword(),
-                dto.getMbti(),dto.getAnimal() , dto.getGender() ,findUser.getCreate_at());
+        findUser.changeMemberSetting(dto);
+    }
+
+    public void updateMemberPW(Long memberId , String pw){
+        Member findUser = em.find(Member.class , memberId);
+        findUser.changeMemberPW(pw);
     }
 
     public void deleteMember(Long memberId){
@@ -57,6 +61,10 @@ public class MemberRepository {
         em.remove(findUser);
     }
 
+    public void clear(){
+        em.flush();
+        em.clear();
+    }
 
 
 }

@@ -3,7 +3,8 @@ import java.time.LocalDateTime;
 import jakarta.persistence.*;
 import lombok.Getter;
 import java.util.*;
-import com.hello.animalChat.Enum.*;;
+import com.hello.animalChat.Enum.*;
+import com.hello.animalChat.dto.UpdateMemberSettingDto;;
 
 
 @Entity
@@ -46,17 +47,14 @@ public class Member {
         this.create_at = create_at;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Member member = (Member) o;
-        return gender == member.gender && Objects.equals(id, member.id) && loginType == member.loginType && Objects.equals(email, member.email) && Objects.equals(password, member.password) && Objects.equals(mbti, member.mbti) && Objects.equals(animal, member.animal) && Objects.equals(create_at, member.create_at) && Objects.equals(receivers, member.receivers);
-    }
+   public void changeMemberPW(String password){
+        this.password=password;
+   }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, loginType, email, password, mbti, animal, gender, create_at, receivers);
-    }
+   public void changeMemberSetting(UpdateMemberSettingDto dto){
+        this.mbti=dto.getMbti();
+        this.animal=dto.getAnimal();
+        this.gender=dto.getGender();
+   }
 }
 
