@@ -7,10 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class MemberUpdateDto {
-    
-    private String email;
-    private String password;
+public class UpdateMemberSettingDto {
     private String mbti;
     private String animal;
     private char gender;

@@ -2,7 +2,7 @@ package com.hello.animalChat.service;
 
 import com.hello.animalChat.Enum.LoginType;
 import com.hello.animalChat.domain.Member;
-import com.hello.animalChat.dto.MemberUpdateDto;
+import com.hello.animalChat.dto.UpdateMemberSettingDto;
 import com.hello.animalChat.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,13 +31,23 @@ public class MemberService {
         return memberRepository.findByEmail(email , loginType).orElse(new Member());
     }
 
-    public void updateMember(Long memberId , MemberUpdateDto dto){
-        memberRepository.updateMember(memberId , dto);
+    @Transactional
+    public void changeMemberSetting(Long memberId , UpdateMemberSettingDto dto){
+        memberRepository.updateMemberSetting(memberId , dto);
+    }
+
+    @Transactional
+    public void changeMemberSetting(Long memberId , String pw){
+        memberRepository.updateMemberPW(memberId , pw);
     }
 
     @Transactional
     public void deleteMember(Long memberId ){
         memberRepository.deleteMember(memberId);
+    }
+
+    public void entityManagerClear(){
+        memberRepository.clear();
     }
 
 }
