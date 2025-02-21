@@ -15,13 +15,9 @@ public class Message {
     @Column(name = "message_id")
     private Long id;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_id")
-    private Member sender;
+    private Long senderId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receiver_id")
-    private Member receiver;
+    private Long receiverId;
 
     @Column(columnDefinition = "TEXT")
     private String message;
@@ -29,9 +25,9 @@ public class Message {
     
     public Message(){}
 
-    public Message(Member sender, Member receiver, String message, LocalDateTime create_at) {
-        this.sender = sender;
-        this.receiver = receiver;
+    public Message(Long senderId, Long receiverId, String message, LocalDateTime create_at) {
+        this.senderId = senderId;
+        this.receiverId = receiverId;
         this.message = message;
         this.create_at = create_at;
     }
