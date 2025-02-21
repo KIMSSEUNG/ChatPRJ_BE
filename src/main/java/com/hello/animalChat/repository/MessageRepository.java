@@ -1,7 +1,9 @@
 package com.hello.animalChat.repository;
 
-import org.aspectj.bridge.Message;
 import org.springframework.stereotype.Repository;
+
+import com.hello.animalChat.domain.Message;
+
 import java.util.*;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +15,10 @@ public class MessageRepository {
     private final EntityManager em;
 
     public List<Message> findByReceiveMessage(Long id){
-        String jpql = "SELECT m FROM Message m WHERE m.receiver = :id";
-        List<Message> findMessage = em.createQuery(jpql , Message.class).getResultList();
+        String jpql = "SELECT m FROM Message m WHERE m.receiveId = :id";
+        List<Message> findMessage = em.createQuery(jpql , Message.class)
+            .setParameter("id", id)
+            .getResultList();
         return findMessage;
     }
     
