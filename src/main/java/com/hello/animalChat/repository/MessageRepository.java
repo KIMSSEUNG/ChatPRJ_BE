@@ -14,6 +14,11 @@ public class MessageRepository {
 
     private final EntityManager em;
 
+    public Message save(Message m){
+        em.persist(m);
+        return m;
+    }
+
     public List<Message> findByReceiveMessage(Long id){
         String jpql = "SELECT m FROM Message m WHERE m.receiveId = :id";
         List<Message> findMessage = em.createQuery(jpql , Message.class)
