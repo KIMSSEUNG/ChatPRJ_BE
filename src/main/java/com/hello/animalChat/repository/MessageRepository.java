@@ -20,7 +20,9 @@ public class MessageRepository {
     }
 
     public List<Message> findByReceiveMessage(Long id){
-        String jpql = "SELECT m FROM Message m WHERE m.receiveId = :id";
+        String jpql = "SELECT m FROM Member m" +
+                " fetch join m.receives" +
+                " WHERE m.id = :id";
         List<Message> findMessage = em.createQuery(jpql , Message.class)
             .setParameter("id", id)
             .getResultList();
