@@ -29,7 +29,9 @@ public class Message {
     
     public Message(){}
 
-    public Message(String message, LocalDateTime create_at) {
+    public Message(Member sender , Member receiver ,  String message, LocalDateTime create_at) {
+        this.sender =sender;
+        this.receiver = receiver;
         this.message = message;
         this.create_at = create_at;
     }

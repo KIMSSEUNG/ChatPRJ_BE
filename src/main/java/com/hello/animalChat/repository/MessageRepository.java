@@ -1,5 +1,6 @@
 package com.hello.animalChat.repository;
 
+import com.hello.animalChat.domain.Member;
 import org.springframework.stereotype.Repository;
 
 import com.hello.animalChat.domain.Message;
@@ -20,9 +21,10 @@ public class MessageRepository {
     }
 
     public List<Message> findByReceiveMessage(Long id){
-        String jpql = "SELECT m FROM Member m" +
-                " fetch join m.receives" +
-                " WHERE m.id = :id";
+        String jpql = "SELECT m FROM Message m" +
+                " join fetch m.sender"+
+                " join fetch m.receiver"+
+                " WHERE m.receiver.id = :id";
         List<Message> findMessage = em.createQuery(jpql , Message.class)
             .setParameter("id", id)
             .getResultList();
