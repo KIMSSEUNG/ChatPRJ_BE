@@ -14,10 +14,14 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "message_id")
     private Long id;
-    
-    private Long senderId;
 
-    private Long receiverId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sender_id")
+    private Member sender;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receiver_id")
+    private Member receiver;
 
     @Column(columnDefinition = "TEXT")
     private String message;
@@ -25,9 +29,9 @@ public class Message {
     
     public Message(){}
 
-    public Message(Long senderId, Long receiverId, String message, LocalDateTime create_at) {
-        this.senderId = senderId;
-        this.receiverId = receiverId;
+    public Message(Member sender , Member receiver ,  String message, LocalDateTime create_at) {
+        this.sender =sender;
+        this.receiver = receiver;
         this.message = message;
         this.create_at = create_at;
     }
