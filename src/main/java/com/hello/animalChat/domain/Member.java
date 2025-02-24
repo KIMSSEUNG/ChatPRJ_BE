@@ -35,9 +35,8 @@ public class Member {
 
     public Member(){}
 
-    public Member(Long id , LoginType loginType, String email, String password, String mbti, String animal, char gender,
+    public Member(LoginType loginType, String email, String password, String mbti, String animal, char gender,
             LocalDateTime create_at) {
-        this.id =id;
         this.loginType = loginType;
         this.email = email;
         this.password = password;

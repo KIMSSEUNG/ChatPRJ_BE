@@ -3,12 +3,11 @@ package com.hello.animalChat.service;
 import com.hello.animalChat.Enum.LoginType;
 import com.hello.animalChat.domain.Member;
 import com.hello.animalChat.dto.UpdateMemberSettingDto;
+import com.hello.animalChat.dto.controller.RequestMemberDto;
 import com.hello.animalChat.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +17,9 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Long saveMember(Member member){
+    public Long saveMember(RequestMemberDto dto){
+        Member member = new Member(dto.getLoginType() , dto.getEmail() , dto.getPassword() ,
+                dto.getMbti() , dto.getAnimal() , dto.getGender() , dto.getCreate_at());
         return memberRepository.save(member);
     }
 

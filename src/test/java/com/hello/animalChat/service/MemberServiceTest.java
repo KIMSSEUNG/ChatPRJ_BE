@@ -4,6 +4,8 @@ import com.hello.animalChat.Enum.LoginType;
 import com.hello.animalChat.domain.Member;
 import com.hello.animalChat.dto.UpdateMemberSettingDto;
 
+import com.hello.animalChat.dto.controller.RequestMemberDto;
+import com.hello.animalChat.repository.MemberRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 
@@ -21,25 +23,28 @@ import java.util.Optional;
 @Transactional
 class MemberServiceTest {
 
+    @Autowired
+    MemberRepository memberRepository;
+    @Autowired
+    MemberService memberService;
     Long testID=0L;
     
     @BeforeEach
     void beforeEach() {
-        Member member = new Member(null , LoginType.GOOGLE, "tmdgh12345" ,"12345","ENFG","고양이",'남',
-                LocalDateTime.now());
-        memberService.saveMember(member);
+        Member member = new Member(LoginType.GOOGLE, "tmdgh12345" ,"12345","ENFG","고양이",'남', LocalDateTime.now());
+        memberRepository.save(member);
         testID = member.getId();
     }
     
     
-    @Autowired
-    MemberService memberService;
+
 
     @Test
     void saveMember() {
-        Member member = new Member(null , LoginType.GOOGLE, "tmdgh" ,"12345","ENFG","고양이",'남',
+        Member member = new Member( LoginType.GOOGLE, "tmdgh" ,"12345","ENFG","고양이",'남',
                 LocalDateTime.now());
-        Long id = memberService.saveMember(member);
+        RequestMemberDto dto = new RequestMemberDto("tmdgh" ,"12345" , LoginType.GOOGLE,"ENFG","고양이",'남', LocalDateTime.now());
+        Long id = memberService.saveMember(dto);
 
         Member find = memberService.findMemberById(id);
         Assertions.assertThat(member.getId()).isEqualTo(find.getId());

@@ -1,18 +1,47 @@
 package com.hello.animalChat.Contoller;
 
+import com.hello.animalChat.domain.Member;
+import com.hello.animalChat.dto.controller.RequestEmailCheckDto;
 import com.hello.animalChat.dto.controller.RequestMemberDto;
+import com.hello.animalChat.service.MemberService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller("/api")
+@RestController
+@RequestMapping(value = "/api")
+@RequiredArgsConstructor
 public class MemberController {
 
-    @PostMapping(value = "/create")
+    private final MemberService memberService;
+
+    @PostMapping(value = "/member/create")
     public ResponseEntity saveMember(@RequestBody RequestMemberDto dto){
-        System.out.println(dto.toString());
+        memberService.saveMember(dto);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping(value = "/member/email/exist")
+    public ResponseEntity EmailExist(@RequestBody RequestEmailCheckDto dto){
+        Member findEmail = memberService.findMemberByEmail(dto.getEmail(), dto.getLoginType());
+        if(findEmail.getId()==null)
+        {
+            //이메일 존재하지 않음
+            return ResponseEntity.ok().build();
+        }
+        else
+        {
+            //이메일 존재함 (Error 담기)
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 존재하는 이메일입니다.");
+        }
+    }
+
+    
+
 
 }

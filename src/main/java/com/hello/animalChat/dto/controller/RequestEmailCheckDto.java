@@ -4,17 +4,9 @@ import com.hello.animalChat.Enum.LoginType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 @Data
 @AllArgsConstructor
-public class RequestMemberDto {
+public class RequestEmailCheckDto {
     private String email;
-    private String password;
     private LoginType loginType;
-    private String mbti;
-    private String animal;
-    private char gender;
-    private LocalDateTime create_at;
-
 }
