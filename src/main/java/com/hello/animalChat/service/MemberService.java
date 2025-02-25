@@ -2,13 +2,15 @@ package com.hello.animalChat.service;
 
 import com.hello.animalChat.Enum.LoginType;
 import com.hello.animalChat.domain.Member;
-import com.hello.animalChat.dto.UpdateMemberSettingDto;
+import com.hello.animalChat.dto.controller.RequestMemberDto;
+import com.hello.animalChat.dto.controller.RequestMemberSettingChangeDto;
 import com.hello.animalChat.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+
+import java.util.*;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +20,9 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Long saveMember(Member member){
+    public Long saveMember(RequestMemberDto dto){
+        Member member = new Member(dto.getLoginType() , dto.getEmail() , dto.getPassword() ,
+                dto.getMbti() , dto.getAnimal() , dto.getGender() , dto.getCreate_at());
         return memberRepository.save(member);
     }
 
@@ -32,18 +36,39 @@ public class MemberService {
     }
 
     @Transactional
-    public void changeMemberSetting(Long memberId , UpdateMemberSettingDto dto){
-        memberRepository.updateMemberSetting(memberId , dto);
+    public boolean changeMemberSetting(RequestMemberSettingChangeDto dto){
+        try{
+            memberRepository.updateMemberSetting(dto);
+            return true;
+        }catch(NoSuchElementException e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Transactional
-    public void changeMemberSetting(Long memberId , String pw){
-        memberRepository.updateMemberPW(memberId , pw);
+    public boolean changeMemberPW(Long memberId , String pw){
+        try{
+            memberRepository.updateMemberPW(memberId , pw);
+            return true;
+        }catch(NoSuchElementException e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Transactional
-    public void deleteMember(Long memberId ){
-        memberRepository.deleteMember(memberId);
+    public boolean deleteMember(Long memberId){
+        try{
+            memberRepository.deleteMember(memberId);
+            return true;
+        }catch(NoSuchElementException e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public void entityManagerClear(){

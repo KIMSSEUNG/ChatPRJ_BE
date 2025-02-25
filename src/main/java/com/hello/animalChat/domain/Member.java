@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import java.util.*;
 import com.hello.animalChat.Enum.*;
-import com.hello.animalChat.dto.UpdateMemberSettingDto;;
+import com.hello.animalChat.dto.controller.RequestMemberSettingChangeDto;;
 
 
 @Entity
@@ -35,9 +35,8 @@ public class Member {
 
     public Member(){}
 
-    public Member(Long id , LoginType loginType, String email, String password, String mbti, String animal, char gender,
+    public Member(LoginType loginType, String email, String password, String mbti, String animal, char gender,
             LocalDateTime create_at) {
-        this.id =id;
         this.loginType = loginType;
         this.email = email;
         this.password = password;
@@ -51,7 +50,7 @@ public class Member {
         this.password=password;
    }
 
-   public void changeMemberSetting(UpdateMemberSettingDto dto){
+   public void changeMemberSetting(RequestMemberSettingChangeDto dto){
         this.mbti=dto.getMbti();
         this.animal=dto.getAnimal();
         this.gender=dto.getGender();

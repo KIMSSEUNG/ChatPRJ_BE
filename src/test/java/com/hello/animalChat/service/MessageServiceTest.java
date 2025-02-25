@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.hello.animalChat.domain.Message;
 import com.hello.animalChat.dto.response.ReceiveMessageResponseDto;
+import com.hello.animalChat.repository.MemberRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,18 +23,20 @@ public class MessageServiceTest {
 
     @Autowired private MessageService messageService;
     @Autowired private MemberService memberService;
+    @Autowired
+    private MemberRepository memberRepository;
     private Long member1_id=0L;
     private Long member2_id=0L;
 
     @BeforeEach
     public void Init(){
-        Member member = new Member(null , LoginType.GOOGLE, "tmdgh12345" ,"12345","ENFG","고양이",'남',
+        Member member = new Member( LoginType.GOOGLE, "tmdgh12345" ,"12345","ENFG","고양이",'남',
                 LocalDateTime.now());
-        Member member2 = new Member(null , LoginType.GOOGLE, "tkdgh5" ,"123335","ETTT","고양이",'여',
+        Member member2 = new Member( LoginType.GOOGLE, "tkdgh5" ,"123335","ETTT","고양이",'여',
                 LocalDateTime.now());
-        memberService.saveMember(member);
+        memberRepository.save(member);
         member1_id = member.getId();
-        memberService.saveMember(member2);
+        memberRepository.save(member2);
         member2_id = member2.getId();
     }
     
