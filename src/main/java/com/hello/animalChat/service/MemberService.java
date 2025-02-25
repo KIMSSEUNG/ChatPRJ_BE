@@ -48,13 +48,27 @@ public class MemberService {
     }
 
     @Transactional
-    public void changeMemberSetting(Long memberId , String pw){
-        memberRepository.updateMemberPW(memberId , pw);
+    public boolean changeMemberPW(Long memberId , String pw){
+        try{
+            memberRepository.updateMemberPW(memberId , pw);
+            return true;
+        }catch(NoSuchElementException e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Transactional
-    public void deleteMember(Long memberId ){
-        memberRepository.deleteMember(memberId);
+    public boolean deleteMember(Long memberId){
+        try{
+            memberRepository.deleteMember(memberId);
+            return true;
+        }catch(NoSuchElementException e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public void entityManagerClear(){

@@ -56,12 +56,17 @@ public class MemberRepository {
 
     public void updateMemberPW(Long memberId , String pw){
         Member findUser = em.find(Member.class , memberId);
+        if(findUser==null){
+            throw new NoSuchElementException("Password를 변경할 멤버가 없습니다.");
+        }
         findUser.changeMemberPW(pw);
     }
 
     public void deleteMember(Long memberId){
         Member findUser = em.find(Member.class , memberId);
-        if(findUser==null)return;
+        if(findUser==null){
+            throw new NoSuchElementException("해당하는 Member가 없음으로 삭제 할 수 없습니다.");
+        }
         em.remove(findUser);
     }
 

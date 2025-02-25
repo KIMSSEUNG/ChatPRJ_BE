@@ -3,16 +3,13 @@ package com.hello.animalChat.Contoller;
 import com.hello.animalChat.domain.Member;
 import com.hello.animalChat.dto.controller.RequestEmailCheckDto;
 import com.hello.animalChat.dto.controller.RequestMemberDto;
+import com.hello.animalChat.dto.controller.RequestMemberPWChangeDto;
+import com.hello.animalChat.dto.controller.RequestMemberSettingChangeDto;
 import com.hello.animalChat.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -22,10 +19,10 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping(value = "/member/create")
-    public ResponseEntity saveMember(@RequestBody RequestMemberDto dto){
+    public String saveMember(@RequestBody RequestMemberDto dto){
 
-        memberService.saveMember(dto);
-        return ResponseEntity.ok().build();
+        Long id = memberService.saveMember(dto);
+        return id.toString();
     }
 
     //조회지만 민감 정보를 담고 있음으로 POST 대체
@@ -50,12 +47,44 @@ public class MemberController {
         boolean isChangeCheck = memberService.changeMemberSetting(dto);
         if(isChangeCheck)
         {
-            //해당하는 아이디가 있을 경우 - 변경 후 ok 반환
+            //해당하는 아이디가 있을 경우 -> 변경 후 ok 반환
             return ResponseEntity.ok().build();
         }
         else
         {
-            //해당하는 아이디가 없을 경우
+            //해당하는 아이디가 없을 경우 -> NotFound Error 발송
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PatchMapping(value = "/member/pw")
+    public ResponseEntity memberPWChange(@RequestBody RequestMemberPWChangeDto dto)
+    {
+        boolean isChangeCheck = memberService.changeMemberPW(dto.getId(), dto.getChangePW());
+        if(isChangeCheck)
+        {
+            //해당하는 아이디가 있을 경우 -> PW 변경 후 ok 반환
+            return ResponseEntity.ok().build();
+        }
+        else
+        {
+            //해당하는 아이디가 없을 경우 -> NotFound Error 발송
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @DeleteMapping("/member/delete")
+    public ResponseEntity memberDelete(@RequestBody Long deleteId)
+    {
+        boolean isChangeCheck = memberService.deleteMember(deleteId);
+        if(isChangeCheck)
+        {
+            //해당하는 아이디가 있을 경우 -> PW 변경 후 ok 반환
+            return ResponseEntity.ok().build();
+        }
+        else
+        {
+            //해당하는 아이디가 없을 경우 -> NotFound Error 발송
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
