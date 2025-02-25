@@ -22,6 +22,7 @@ public class MemberController {
 
     @PostMapping(value = "/member/create")
     public ResponseEntity saveMember(@RequestBody RequestMemberDto dto){
+
         memberService.saveMember(dto);
         return ResponseEntity.ok().build();
     }
