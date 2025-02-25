@@ -1,11 +1,12 @@
 package com.hello.animalChat.repository;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import com.hello.animalChat.Enum.LoginType;
 
 import org.springframework.stereotype.Repository;
 import com.hello.animalChat.domain.Member;
-import com.hello.animalChat.dto.UpdateMemberSettingDto;
+import com.hello.animalChat.dto.controller.RequestMemberSettingChangeDto;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -34,19 +35,22 @@ public class MemberRepository {
     public Optional<Member> findByEmail(String email , LoginType type){
         try{
             String jpql = "SELECT u FROM Member u WHERE u.email = :email AND u.loginType = :type";
-            Member user = em.createQuery(jpql, Member.class)
-                .setParameter("email", email) // 🔥 안전한 바인딩
+            Member member = em.createQuery(jpql, Member.class)
+                .setParameter("email", email) 
                 .setParameter("type", type)
                 .getSingleResult();
-            return Optional.ofNullable(user);
+            return Optional.of(member);
         }catch(NoResultException e){
             log.warn(e.getMessage());
             return Optional.empty();
         }
     }
 
-    public void updateMemberSetting(Long memberId , UpdateMemberSettingDto dto){
-        Member findUser = em.find(Member.class , memberId);
+    public void updateMemberSetting(RequestMemberSettingChangeDto dto){
+        Member findUser = em.find(Member.class , dto.getChangeId());
+        if(findUser==null){
+            throw new NoSuchElementException("Setting을 변경할 멤버가 없습니다.");
+        }
         findUser.changeMemberSetting(dto);
     }
 
