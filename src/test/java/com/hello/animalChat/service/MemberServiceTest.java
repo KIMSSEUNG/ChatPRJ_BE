@@ -2,9 +2,9 @@ package com.hello.animalChat.service;
 
 import com.hello.animalChat.Enum.LoginType;
 import com.hello.animalChat.domain.Member;
-import com.hello.animalChat.dto.UpdateMemberSettingDto;
 
 import com.hello.animalChat.dto.controller.RequestMemberDto;
+import com.hello.animalChat.dto.controller.RequestMemberSettingChangeDto;
 import com.hello.animalChat.repository.MemberRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -63,11 +63,10 @@ class MemberServiceTest {
 
     @Test
     void updateMember() {
-        UpdateMemberSettingDto dto = new UpdateMemberSettingDto("ENFJ", "cat", '여');
-        Long id = 1L;
-        memberService.changeMemberSetting(id, dto);
+        RequestMemberSettingChangeDto dto = new RequestMemberSettingChangeDto(1L,"ENFJ", "cat", '여');
+        memberService.changeMemberSetting(dto);
         memberService.entityManagerClear();
-        Member find = memberService.findMemberById(id);
+        Member find = memberService.findMemberById(dto.getChangeId());
         Assertions.assertThat(find.getAnimal()).isEqualTo("cat");
     }
 

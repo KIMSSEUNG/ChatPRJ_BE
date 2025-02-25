@@ -2,10 +2,13 @@ package com.hello.animalChat.service;
 
 import com.hello.animalChat.Enum.LoginType;
 import com.hello.animalChat.domain.Member;
-import com.hello.animalChat.dto.UpdateMemberSettingDto;
 import com.hello.animalChat.dto.controller.RequestMemberDto;
+import com.hello.animalChat.dto.controller.RequestMemberSettingChangeDto;
 import com.hello.animalChat.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+
+import java.util.*;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,8 +36,15 @@ public class MemberService {
     }
 
     @Transactional
-    public void changeMemberSetting(Long memberId , UpdateMemberSettingDto dto){
-        memberRepository.updateMemberSetting(memberId , dto);
+    public boolean changeMemberSetting(RequestMemberSettingChangeDto dto){
+        try{
+            memberRepository.updateMemberSetting(dto);
+            return true;
+        }catch(NoSuchElementException e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Transactional
