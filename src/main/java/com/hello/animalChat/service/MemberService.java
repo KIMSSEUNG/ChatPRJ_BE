@@ -22,7 +22,7 @@ public class MemberService {
     @Transactional
     public Long saveMember(RequestMemberDto dto){
         Member member = new Member(dto.getLoginType() , dto.getEmail() , dto.getPassword() ,
-                dto.getMbti() , dto.getAnimal() , dto.getGender() , dto.getCreate_at());
+                dto.getName() , dto.getMbti() , dto.getAnimal() , dto.getGender() , dto.getCreate_at());
         return memberRepository.save(member);
     }
 

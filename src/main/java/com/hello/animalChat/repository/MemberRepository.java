@@ -41,8 +41,7 @@ public class MemberRepository {
                 .getSingleResult();
             return Optional.of(member);
         }catch(NoResultException e){
-            log.warn(e.getMessage());
-            return Optional.empty();
+            throw new NoResultException("해당하는 이메일이 없습니다.");
         }
     }
 
