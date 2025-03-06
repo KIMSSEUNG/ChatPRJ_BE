@@ -23,6 +23,7 @@ public class Member {
     @Column(unique = true)
     private String email;
     private String password;
+    private String name;
     @Column(length = 4)
     private String mbti;
     @Column(length = 20)
@@ -35,11 +36,12 @@ public class Member {
 
     public Member(){}
 
-    public Member(LoginType loginType, String email, String password, String mbti, String animal, char gender,
+    public Member(LoginType loginType, String email, String password,String name ,String mbti, String animal, char gender,
             LocalDateTime create_at) {
         this.loginType = loginType;
         this.email = email;
         this.password = password;
+        this.name = name;
         this.mbti = mbti;
         this.animal = animal;
         this.gender = gender;

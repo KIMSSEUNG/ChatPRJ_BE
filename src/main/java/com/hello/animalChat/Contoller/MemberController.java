@@ -1,10 +1,7 @@
 package com.hello.animalChat.Contoller;
 
 import com.hello.animalChat.domain.Member;
-import com.hello.animalChat.dto.controller.RequestEmailCheckDto;
-import com.hello.animalChat.dto.controller.RequestMemberDto;
-import com.hello.animalChat.dto.controller.RequestMemberPWChangeDto;
-import com.hello.animalChat.dto.controller.RequestMemberSettingChangeDto;
+import com.hello.animalChat.dto.controller.*;
 import com.hello.animalChat.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

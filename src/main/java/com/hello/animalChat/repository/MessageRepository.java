@@ -21,7 +21,7 @@ public class MessageRepository {
         return m;
     }
 
-    public List<Message> findByReceiveMessage(Long id){
+    public List<Message> findByReceiveAllMessage(Long id){
         String jpql = "SELECT m FROM Message m" +
                 " join fetch m.sender"+
                 " join fetch m.receiver"+
@@ -37,11 +37,11 @@ public class MessageRepository {
                 " join fetch m.sender"+
                 " join fetch m.receiver"+
                 " WHERE m.receiver.id = :id"+
-                " AND ";
+                " AND m.create_at = :time";
         List<Message> findMessage = em.createQuery(jpql , Message.class)
             .setParameter("id", id)
+            .setParameter("time", lastReceiveTime)
             .getResultList();
         return findMessage;
-    }
-    
+    }   
 }
