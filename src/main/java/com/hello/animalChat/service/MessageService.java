@@ -28,7 +28,7 @@ public class MessageService {
 
     //회원의 모든 메세지를 찾기 위한 기능
     public Map<Long , ReceiveMessageResponseDto> receiveMessage(Member member){
-        List<Message> findMessage = messageRepository.findByReceiveMessage(member.getId());
+        List<Message> findMessage = messageRepository.findByReceiveAllMessage(member.getId());
 
         Map<Long , ReceiveMessageResponseDto> result = new HashMap<>();
         for(int i=0;i<findMessage.size();i++){
