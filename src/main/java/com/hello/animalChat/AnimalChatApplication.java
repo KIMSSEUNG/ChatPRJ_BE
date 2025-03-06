@@ -9,6 +9,5 @@ public class AnimalChatApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(AnimalChatApplication.class, args);
 	}
-
 }
 

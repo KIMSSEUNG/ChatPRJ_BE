@@ -14,6 +14,7 @@ public class RequestMemberDto {
     private String email;
     private String password;
     private LoginType loginType;
+    private String name;
     private String mbti;
     private String animal;
     private char gender;
