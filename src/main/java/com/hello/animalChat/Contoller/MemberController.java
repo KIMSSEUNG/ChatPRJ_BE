@@ -20,7 +20,7 @@ public class MemberController {
 
     @PostMapping(value = "/member/create")
     public String saveMember(@RequestBody RequestMemberDto dto){
-
+        System.out.println(dto.toString());
         Long id = memberService.saveMember(dto);
         return id.toString();
     }

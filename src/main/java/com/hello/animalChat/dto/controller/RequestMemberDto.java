@@ -11,9 +11,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestMemberDto {
+    private LoginType loginType;
     private String email;
     private String password;
-    private LoginType loginType;
+    private String name;
     private String mbti;
     private String animal;
     private char gender;
