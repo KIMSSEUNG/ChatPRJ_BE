@@ -1,9 +1,12 @@
 package com.hello.animalChat.repository;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import com.hello.animalChat.Enum.LoginType;
 
+import jakarta.persistence.Query;
 import org.springframework.stereotype.Repository;
 import com.hello.animalChat.domain.Member;
 import com.hello.animalChat.dto.controller.RequestMemberSettingChangeDto;
@@ -22,6 +25,7 @@ public class MemberRepository {
     
 
     public Long save(Member member){
+        member.setCreateAt(LocalDateTime.now());
         em.persist(member);
         return member.getId();
     }

@@ -10,9 +10,9 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class LoginDto {
-
     private String email;
     private LoginType loginType;
     private String password;
+    public LoginDto(){}
 
 }

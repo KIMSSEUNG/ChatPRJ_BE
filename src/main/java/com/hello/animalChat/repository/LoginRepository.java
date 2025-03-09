@@ -34,13 +34,23 @@ public class LoginRepository {
         }
     }
     
-    public ResponseLoginDto login(LoginDto dto){
+    public ResponseLoginDto loginBasic(LoginDto dto){
         Member m = memberRepository.findByEmail(dto.getEmail(), dto.getLoginType()).orElse(null);
+        //비밀 번호 확인
         passwordCheck(dto.getLoginType() , dto.getEmail() , dto.getPassword());
-        
+
         return new ResponseLoginDto(m.getId(), m.getName()
                     , m.getMbti(), m.getAnimal(), m.getGender());
         
+    }
+
+    public ResponseLoginDto loginGoogle(LoginDto dto){
+        Member m = memberRepository.findByEmail(dto.getEmail(), dto.getLoginType()).orElse(null);
+        //구글은 아이디로만 확인
+
+        return new ResponseLoginDto(m.getId(), m.getName()
+                , m.getMbti(), m.getAnimal(), m.getGender());
+
     }
 
 

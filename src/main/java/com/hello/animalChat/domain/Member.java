@@ -1,4 +1,5 @@
 package com.hello.animalChat.domain;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -48,14 +49,33 @@ public class Member {
         this.create_at = create_at;
     }
 
-   public void changeMemberPW(String password){
+    public  void setCreateAt(LocalDateTime createAt){
+        this.create_at = createAt;
+    }
+
+    public void changeMemberPW(String password){
         this.password=password;
    }
 
-   public void changeMemberSetting(RequestMemberSettingChangeDto dto){
+    public void changeMemberSetting(RequestMemberSettingChangeDto dto){
         this.mbti=dto.getMbti();
         this.animal=dto.getAnimal();
         this.gender=dto.getGender();
-   }
+    }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "id=" + id +
+                ", loginType=" + loginType +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", mbti='" + mbti + '\'' +
+                ", animal='" + animal + '\'' +
+                ", gender=" + gender +
+                ", create_at=" + create_at +
+                '}';
+    }
 }
 
