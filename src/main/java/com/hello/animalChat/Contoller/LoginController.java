@@ -19,11 +19,17 @@ public class LoginController {
     
     private final LoginService loginService;
     
-    @PostMapping("/login")
-    public ResponseEntity<ResponseLoginDto> login(@RequestBody LoginDto dto) {
-        ResponseLoginDto resDto = loginService.login(dto);
+    @PostMapping("/login/basic")
+    public ResponseEntity<ResponseLoginDto> loginBasic(@RequestBody LoginDto dto) {
+        ResponseLoginDto resDto = loginService.loginBasic(dto);
         return ResponseEntity.ok().body(resDto);
-    } 
+    }
+
+    @PostMapping("/login/google")
+    public ResponseEntity<ResponseLoginDto> loginGoogle(@RequestBody LoginDto dto) {
+        ResponseLoginDto resDto = loginService.loginGoogle(dto);
+        return ResponseEntity.ok().body(resDto);
+    }
 
 
     @ExceptionHandler(NoResultException.class)
