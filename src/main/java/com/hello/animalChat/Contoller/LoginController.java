@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.external.fcm.FcmUtil;
 import com.hello.animalChat.dto.controller.LoginDto;
 import com.hello.animalChat.dto.response.ResponseLoginDto;
 import com.hello.animalChat.error.ErrorResult;
@@ -18,10 +19,13 @@ import lombok.RequiredArgsConstructor;
 public class LoginController {
     
     private final LoginService loginService;
+    private final FcmTokenService fcmTokenService;
     
     @PostMapping("/login/basic")
     public ResponseEntity<ResponseLoginDto> loginBasic(@RequestBody LoginDto dto) {
         ResponseLoginDto resDto = loginService.loginBasic(dto);
+
+
         return ResponseEntity.ok().body(resDto);
     }
 
@@ -29,6 +33,14 @@ public class LoginController {
     public ResponseEntity<ResponseLoginDto> loginGoogle(@RequestBody LoginDto dto) {
         ResponseLoginDto resDto = loginService.loginGoogle(dto);
         return ResponseEntity.ok().body(resDto);
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<ResponseLoginDto> logout(@RequestBody Long id) {
+        //토큰제거
+        fcmTokenService.deleteToken(id);
+        
+        return ResponseEntity.ok().build();
     }
 
 

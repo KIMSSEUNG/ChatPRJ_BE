@@ -1,6 +1,7 @@
 package com.hello.animalChat.service;
 import com.hello.animalChat.domain.Member;
 import com.hello.animalChat.domain.Message;
+import com.hello.animalChat.dto.MessageDto;
 import com.hello.animalChat.dto.response.*;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,8 @@ public class MessageService {
         messageRepository.save(message);
     }
 
+
+    
 
     //회원의 모든 메세지를 찾기 위한 기능
     public Map<Long , ReceiveMessageResponseDto> receiveMessage(Member member){
@@ -73,6 +76,15 @@ public class MessageService {
 
         return result;
 
+    }
+
+    public void savaMessage(MessageDto dto) {
+        Member sender = memberRepository.findById(dto.getSenderId());
+        Member receiver = memberRepository.findById(dto.getReceiverId());
+        
+        Message message =  new Message(sender,receiver,dto.getMessage(),LocalDateTime.now());
+
+        messageRepository.save(message);
     }
     
 }
