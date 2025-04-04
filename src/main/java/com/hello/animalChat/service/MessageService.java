@@ -30,17 +30,21 @@ public class MessageService {
     
 
     //회원의 모든 메세지를 찾기 위한 기능
-    public Map<Long , ReceiveMessageResponseDto> receiveMessage(Member member){
-        List<Message> findMessage = messageRepository.findByReceiveAllMessage(member.getId());
+    public List<MessageDetailDto> receiveMessage(Long id){
+        
+        //메세지 도메인 얻어옴
+        List<Message> findMessage = messageRepository.findByReceiveAllMessage(id);
 
-        Map<Long , ReceiveMessageResponseDto> result = new HashMap<>();
+        //맵으로 만든이유
+        //중복되는 MessageDetailDto를 없애기 위해 키 값을 넣어서 중복 방지
+        Map<Long , MessageDetailDto> result = new HashMap<>();
         for(int i=0;i<findMessage.size();i++){
             Message m = findMessage.get(i);
             if(result.containsKey(m.getSender().getId())){
                 result.get(m.getSender().getId()).getMessage().add(m.getMessage());
             }
             else{
-                result.put(m.getSender().getId() , new ReceiveMessageResponseDto(
+                result.put(m.getSender().getId() , new MessageDetailDto(
                         m.getSender().getId() ,
                         m.getSender().getMbti() ,
                         m.getSender().getAnimal() ,
@@ -50,21 +54,22 @@ public class MessageService {
             }
         }
 
-        return result;
+        return new ArrayList<>(result.values());
     }
 
 
-    public Map<Long , ReceiveMessageResponseDto> receiveNewMessage(Long receiveId , LocalDateTime lastReceiveTime){
+    //Polling 방식이면 해당하는 것으로 사용해야된다. (old)
+    public Map<Long , MessageDetailDto> receiveNewMessage(Long receiveId , LocalDateTime lastReceiveTime){
         List<Message> findMessage = messageRepository.findByNewMessage(receiveId ,  lastReceiveTime);
 
-        Map<Long , ReceiveMessageResponseDto> result = new HashMap<>();
+        Map<Long , MessageDetailDto> result = new HashMap<>();
         for(int i=0;i<findMessage.size();i++){
             Message m = findMessage.get(i);
             if(result.containsKey(m.getSender().getId())){
                 result.get(m.getSender().getId()).getMessage().add(m.getMessage());
             }
             else{
-                result.put(m.getSender().getId() , new ReceiveMessageResponseDto(
+                result.put(m.getSender().getId() , new MessageDetailDto(
                         m.getSender().getId() ,
                         m.getSender().getMbti() ,
                         m.getSender().getAnimal() ,

@@ -3,6 +3,7 @@ package com.external.fcm;
 import org.springframework.web.client.RestTemplate;
 
 import com.hello.animalChat.dto.MessageDto;
+import com.hello.animalChat.error.FcmTokenException;
 
 import java.util.Map;
 
@@ -52,6 +53,11 @@ public class FcmUtil {
             ResponseEntity<String> response = restTemplate.postForEntity(
                 FCM_URL, request, String.class
             );
+            
+
+            if (response.getBody().contains("NotRegistered") || response.getBody().contains("InvalidRegistration")) {
+                throw new FcmTokenException("FCM 토큰이 유효하지 않음: " + token);
+            }
 
             System.out.println("✅ FCM 전송 완료: " + response.getStatusCode());
             System.out.println("📨 FCM 응답 바디: " + response.getBody());
