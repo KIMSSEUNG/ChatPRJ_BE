@@ -19,12 +19,10 @@ public class FcmTokenRepository {
         
         try{
             findByUserToken(dto.getUserId());
-            //해당하는 토큰이 있음으로
-            return;
         }
         catch(NoResultException e){
             //해당하는 토큰이 없음으로 등록
-            FcmToken entity = new FcmToken(dto.getToken());
+            FcmToken entity = new FcmToken(dto.getUserId(), dto.getToken());
             em.persist(entity);
         }
     }

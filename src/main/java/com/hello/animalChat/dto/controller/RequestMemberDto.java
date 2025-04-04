@@ -1,5 +1,6 @@
 package com.hello.animalChat.dto.controller;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hello.animalChat.Enum.LoginType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestMemberDto {
+    @JsonProperty("type")
     private LoginType loginType;
     private String email;
     private String password;

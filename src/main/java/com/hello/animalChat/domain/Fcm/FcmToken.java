@@ -12,12 +12,12 @@ import lombok.Getter;
 public class FcmToken {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "fcmtoken_id")
     private Long id;
     private String token;
     
-    public FcmToken(String token) {
+    public FcmToken(Long id , String token) {
+        this.id =id;
         this.token = token;
     }
     
