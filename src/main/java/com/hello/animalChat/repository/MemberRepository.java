@@ -67,9 +67,6 @@ public class MemberRepository {
 
     public void deleteMember(Long memberId){
         Member findUser = em.find(Member.class , memberId);
-        if(findUser==null){
-            throw new NoSuchElementException("해당하는 Member가 없음으로 삭제 할 수 없습니다.");
-        }
         em.remove(findUser);
     }
 

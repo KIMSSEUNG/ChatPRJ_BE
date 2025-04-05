@@ -10,7 +10,7 @@ import java.util.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReceiveMessageResponseDto {
+public class MessageDetailDto {
     private Long send_id;
     private String mbti;
     private String animal;
