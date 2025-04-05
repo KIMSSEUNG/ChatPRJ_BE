@@ -2,6 +2,7 @@ package com.hello.animalChat.Contoller;
 
 import com.hello.animalChat.domain.Member;
 import com.hello.animalChat.dto.controller.*;
+import com.hello.animalChat.service.FcmTokenService;
 import com.hello.animalChat.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,10 +15,10 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final MemberService memberService;
+    private final FcmTokenService fcmTokenService;
 
     @PostMapping(value = "/member/create")
     public String saveMember(@RequestBody RequestMemberDto dto){
-        System.out.println(dto.toString());
         Long id = memberService.saveMember(dto);
         return id.toString();
     }
@@ -73,17 +74,13 @@ public class MemberController {
     @DeleteMapping("/member/delete")
     public ResponseEntity memberDelete(@RequestBody Long deleteId)
     {
-        boolean isChangeCheck = memberService.deleteMember(deleteId);
-        if(isChangeCheck)
-        {
-            //해당하는 아이디가 있을 경우 -> PW 변경 후 ok 반환
-            return ResponseEntity.ok().build();
-        }
-        else
-        {
-            //해당하는 아이디가 없을 경우 -> NotFound Error 발송
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        //멤버 delete
+        memberService.deleteMember(deleteId);
+        
+        //토큰 삭제
+        fcmTokenService.deleteToken(deleteId);
+
+        return ResponseEntity.ok().build();
     }
 
 }

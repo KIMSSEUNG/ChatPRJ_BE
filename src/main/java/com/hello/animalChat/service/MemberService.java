@@ -60,15 +60,9 @@ public class MemberService {
     }
 
     @Transactional
-    public boolean deleteMember(Long memberId){
-        try{
-            memberRepository.deleteMember(memberId);
-            return true;
-        }catch(NoSuchElementException e){
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-            return false;
-        }
+    public void deleteMember(Long memberId){
+        memberRepository.deleteMember(memberId);
+        
     }
 
     public void entityManagerClear(){
