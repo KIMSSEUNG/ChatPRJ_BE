@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestMemberDto {
+public class MemberDto {
     @JsonProperty("type")
     private LoginType loginType;
     private String email;
@@ -19,6 +19,7 @@ public class RequestMemberDto {
     private String name;
     private String mbti;
     private String animal;
+    private String token;
     private char gender;
     private LocalDateTime create_at;
 

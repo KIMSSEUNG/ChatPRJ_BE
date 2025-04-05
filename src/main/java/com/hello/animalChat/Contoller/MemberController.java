@@ -15,10 +15,9 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final MemberService memberService;
-    private final FcmTokenService fcmTokenService;
 
     @PostMapping(value = "/member/create")
-    public String saveMember(@RequestBody RequestMemberDto dto){
+    public String saveMember(@RequestBody MemberDto dto){
         Long id = memberService.saveMember(dto);
         return id.toString();
     }
@@ -74,12 +73,7 @@ public class MemberController {
     @DeleteMapping("/member/delete")
     public ResponseEntity memberDelete(@RequestBody Long deleteId)
     {
-        //멤버 delete
         memberService.deleteMember(deleteId);
-        
-        //토큰 삭제
-        fcmTokenService.deleteToken(deleteId);
-
         return ResponseEntity.ok().build();
     }
 

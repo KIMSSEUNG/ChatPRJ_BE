@@ -2,8 +2,10 @@ package com.hello.animalChat.service;
 
 import com.hello.animalChat.Enum.LoginType;
 import com.hello.animalChat.domain.Member;
-import com.hello.animalChat.dto.controller.RequestMemberDto;
+import com.hello.animalChat.dto.controller.FcmTokenDto;
+import com.hello.animalChat.dto.controller.MemberDto;
 import com.hello.animalChat.dto.controller.RequestMemberSettingChangeDto;
+import com.hello.animalChat.repository.FcmTokenRepository;
 import com.hello.animalChat.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -18,11 +20,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final FcmTokenRepository fcmTokenRepository;
 
     @Transactional
-    public Long saveMember(RequestMemberDto dto){
+    public Long saveMember(MemberDto dto){
         Member member = new Member(dto.getLoginType() , dto.getEmail() , dto.getPassword() ,
                 dto.getName() , dto.getMbti() , dto.getAnimal() , dto.getGender() , dto.getCreate_at());
+
+        //토큰 저장
+        fcmTokenRepository.save(new FcmTokenDto(member.getId() , dto.getToken()));
+
         return memberRepository.save(member);
     }
 
@@ -62,7 +69,7 @@ public class MemberService {
     @Transactional
     public void deleteMember(Long memberId){
         memberRepository.deleteMember(memberId);
-        
+        fcmTokenRepository.deleteToken(memberId);
     }
 
     public void entityManagerClear(){

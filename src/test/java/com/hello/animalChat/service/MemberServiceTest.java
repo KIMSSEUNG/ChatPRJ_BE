@@ -3,21 +3,18 @@ package com.hello.animalChat.service;
 import com.hello.animalChat.Enum.LoginType;
 import com.hello.animalChat.domain.Member;
 
-import com.hello.animalChat.dto.controller.RequestMemberDto;
+import com.hello.animalChat.dto.controller.MemberDto;
 import com.hello.animalChat.dto.controller.RequestMemberSettingChangeDto;
 import com.hello.animalChat.repository.MemberRepository;
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @SpringBootTest
 @Transactional
@@ -43,7 +40,7 @@ class MemberServiceTest {
     void saveMember() {
         Member member = new Member( LoginType.GOOGLE, "tmdgh" ,"12345","ENFG","고양이",'남',
                 LocalDateTime.now());
-        RequestMemberDto dto = new RequestMemberDto("tmdgh" ,"12345" , LoginType.GOOGLE,"ENFG","고양이",'남', LocalDateTime.now());
+        MemberDto dto = new MemberDto("tmdgh" ,"12345" , LoginType.GOOGLE,"ENFG","고양이",'남', LocalDateTime.now());
         Long id = memberService.saveMember(dto);
 
         Member find = memberService.findMemberById(id);
