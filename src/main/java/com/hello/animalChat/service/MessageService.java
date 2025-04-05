@@ -16,12 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class MessageService {
 
     private final MessageRepository messageRepository;
     private final MemberRepository memberRepository;
 
+    @Transactional
     public void savaMessage(Message message){
         messageRepository.save(message);
     }
@@ -83,6 +84,7 @@ public class MessageService {
 
     }
 
+    @Transactional
     public void savaMessage(MessageDto dto) {
         Member sender = memberRepository.findById(dto.getSenderId());
         Member receiver = memberRepository.findById(dto.getReceiverId());

@@ -51,26 +51,15 @@ public class MessageController {
             log.info(e.getMessage());
             return ResponseEntity.status(HttpStatusCode.valueOf(440)).build();
         }
-        catch(Exception e){
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatusCode.valueOf(400)).build();
-        }    
         
     }
 
     @PostMapping("/message/all")
     public ResponseEntity getAllMessages(@RequestBody Long dto)
     {
-        try{
-            //모든 메세지 추출
-            List<MessageDetailDto> receiveMessage = messageService.receiveMessage(dto);
-            return ResponseEntity.ok().body(receiveMessage);
-
-        }catch(Exception e){
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatusCode.valueOf(400)).build();
-        }    
-        
+        //모든 메세지 추출
+        List<MessageDetailDto> receiveMessage = messageService.receiveMessage(dto);
+        return ResponseEntity.ok().body(receiveMessage);
     }
 
 

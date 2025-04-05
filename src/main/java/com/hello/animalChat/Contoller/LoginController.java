@@ -24,8 +24,6 @@ public class LoginController {
     @PostMapping("/login/basic")
     public ResponseEntity<ResponseLoginDto> loginBasic(@RequestBody LoginDto dto) {
         ResponseLoginDto resDto = loginService.loginBasic(dto);
-
-
         return ResponseEntity.ok().body(resDto);
     }
 
@@ -36,7 +34,7 @@ public class LoginController {
     }
 
     @GetMapping("/logout")
-    public ResponseEntity<ResponseLoginDto> logout(@RequestBody Long id) {
+    public ResponseEntity<ResponseLoginDto> logout(@RequestParam Long id) {
         //토큰제거
         fcmTokenService.deleteToken(id);
         
@@ -49,6 +47,7 @@ public class LoginController {
          return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(new ErrorResult(HttpStatus.BAD_REQUEST.value(), "이메일과 비밀번호가 틀렸습니다."));
     }
+
     
 }
 

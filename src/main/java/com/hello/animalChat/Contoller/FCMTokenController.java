@@ -22,8 +22,15 @@ public class FCMTokenController {
 
     @PostMapping("/fcm/token/regist")
     public ResponseEntity tokenSave(@RequestBody FcmTokenDto dto) {
-        fcmTokenService.save(dto);
-        return ResponseEntity.ok().build();
+        try{
+            fcmTokenService.save(dto);
+            return ResponseEntity.ok().build();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
+
     }
 
 

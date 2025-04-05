@@ -7,9 +7,11 @@ import com.hello.animalChat.dto.response.ResponseLoginDto;
 import com.hello.animalChat.repository.LoginRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class LoginService {
     
     private final LoginRepository LoginRepository;
