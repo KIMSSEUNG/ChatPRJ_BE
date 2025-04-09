@@ -18,15 +18,17 @@ public class MemberController {
 
     @PostMapping(value = "/member/create")
     public String saveMember(@RequestBody MemberDto dto){
+        System.out.println(dto);
         Long id = memberService.saveMember(dto);
         return id.toString();
     }
+
 
     //조회지만 민감 정보를 담고 있음으로 POST 대체
     @PostMapping(value = "/member/email/exist")
     public ResponseEntity EmailExist(@RequestBody RequestEmailCheckDto dto){
         Member findEmail = memberService.findMemberByEmail(dto.getEmail(), dto.getLoginType());
-        if(findEmail.getId()==null)
+        if(findEmail==null)
         {
             //이메일 존재하지 않음
             return ResponseEntity.ok().build();

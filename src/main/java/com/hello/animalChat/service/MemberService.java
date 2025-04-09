@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.*;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,13 +25,13 @@ public class MemberService {
 
     @Transactional
     public Long saveMember(MemberDto dto){
-        Member member = new Member(dto.getLoginType() , dto.getEmail() , dto.getPassword() ,
-                dto.getName() , dto.getMbti() , dto.getAnimal() , dto.getGender() , dto.getCreate_at());
+        Long id = memberRepository.save(new Member(dto.getLoginType() , dto.getEmail() , dto.getPassword() ,
+                dto.getName() , dto.getMbti() , dto.getAnimal() , dto.getGender() , dto.getCreate_at()));
 
         //토큰 저장
-        fcmTokenRepository.save(new FcmTokenDto(member.getId() , dto.getToken()));
+        fcmTokenRepository.save(new FcmTokenDto(id , dto.getToken()));
 
-        return memberRepository.save(member);
+        return id;
     }
 
     public Member findMemberById(Long id){
@@ -39,7 +40,12 @@ public class MemberService {
 
 
     public Member findMemberByEmail(String email , LoginType loginType){
-        return memberRepository.findByEmail(email , loginType).orElse(new Member());
+        try {
+            return memberRepository.findByEmail(email , loginType).orElse(new Member());
+        }catch (EmptyResultDataAccessException e){
+            return null;
+        }
+
     }
 
     @Transactional
@@ -48,7 +54,6 @@ public class MemberService {
             memberRepository.updateMemberSetting(dto);
             return true;
         }catch(NoSuchElementException e){
-            System.out.println(e.getMessage());
             e.printStackTrace();
             return false;
         }
@@ -60,7 +65,6 @@ public class MemberService {
             memberRepository.updateMemberPW(memberId , pw);
             return true;
         }catch(NoSuchElementException e){
-            System.out.println(e.getMessage());
             e.printStackTrace();
             return false;
         }
