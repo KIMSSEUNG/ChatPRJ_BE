@@ -22,6 +22,7 @@ public class FcmTokenRepository {
         }
         catch(NoResultException e){
             //해당하는 토큰이 없음으로 등록
+            System.out.println(dto.getUserId());
             FcmToken entity = new FcmToken(dto.getUserId(), dto.getToken());
             em.persist(entity);
         }

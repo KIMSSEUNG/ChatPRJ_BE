@@ -45,7 +45,7 @@ public class LoginController {
     @ExceptionHandler(NoResultException.class)
     public ResponseEntity<ErrorResult>  NoResultExHandle(NoResultException e) {
          return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(new ErrorResult(HttpStatus.BAD_REQUEST.value(), "이메일과 비밀번호가 틀렸습니다."));
+            .body(new ErrorResult(HttpStatus.BAD_REQUEST.value(), "이메일 또는 비밀번호가 틀렸습니다."));
     }
 
     
