@@ -2,7 +2,7 @@ package com.external.fcm;
 
 import org.springframework.web.client.RestTemplate;
 
-import com.hello.animalChat.dto.MessageDto;
+import com.hello.animalChat.dto.message.MessageDto;
 import com.hello.animalChat.error.FcmTokenException;
 
 import java.util.Map;

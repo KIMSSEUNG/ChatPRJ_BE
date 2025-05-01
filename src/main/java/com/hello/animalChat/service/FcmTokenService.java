@@ -2,7 +2,7 @@ package com.hello.animalChat.service;
 
 import org.springframework.stereotype.Service;
 
-import com.hello.animalChat.dto.controller.FcmTokenDto;
+import com.hello.animalChat.dto.FcmTokenDto;
 import com.hello.animalChat.repository.FcmTokenRepository;
 
 import lombok.RequiredArgsConstructor;

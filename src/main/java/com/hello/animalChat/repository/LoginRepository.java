@@ -3,8 +3,8 @@ package com.hello.animalChat.repository;
 import org.springframework.stereotype.Repository;
 
 import com.hello.animalChat.Enum.LoginType;
-import com.hello.animalChat.domain.Member;
-import com.hello.animalChat.dto.controller.LoginDto;
+import com.hello.animalChat.domain.member.Member;
+import com.hello.animalChat.dto.LoginDto;
 import com.hello.animalChat.dto.response.ResponseLoginDto;
 
 import jakarta.persistence.EntityManager;

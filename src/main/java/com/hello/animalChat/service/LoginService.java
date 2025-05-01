@@ -2,7 +2,7 @@ package com.hello.animalChat.service;
 
 import org.springframework.stereotype.Service;
 
-import com.hello.animalChat.dto.controller.LoginDto;
+import com.hello.animalChat.dto.LoginDto;
 import com.hello.animalChat.dto.response.ResponseLoginDto;
 import com.hello.animalChat.repository.LoginRepository;
 

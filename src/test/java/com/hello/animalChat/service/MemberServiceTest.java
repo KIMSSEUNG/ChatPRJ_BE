@@ -1,10 +1,10 @@
 package com.hello.animalChat.service;
 
 import com.hello.animalChat.Enum.LoginType;
-import com.hello.animalChat.domain.Member;
+import com.hello.animalChat.domain.member.Member;
 
-import com.hello.animalChat.dto.controller.MemberDto;
-import com.hello.animalChat.dto.controller.RequestMemberSettingChangeDto;
+import com.hello.animalChat.dto.member.MemberDto;
+import com.hello.animalChat.dto.member.MemberSettingChangeDto;
 import com.hello.animalChat.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 
@@ -60,7 +60,7 @@ class MemberServiceTest {
 
     @Test
     void updateMember() {
-        RequestMemberSettingChangeDto dto = new RequestMemberSettingChangeDto(1L,"ENFJ", "cat", '여');
+        MemberSettingChangeDto dto = new MemberSettingChangeDto(1L,"ENFJ", "cat", '여');
         memberService.changeMemberSetting(dto);
         memberService.entityManagerClear();
         Member find = memberService.findMemberById(dto.getChangeId());

@@ -1,10 +1,10 @@
 package com.hello.animalChat.service;
 
 import com.hello.animalChat.Enum.LoginType;
-import com.hello.animalChat.domain.Member;
-import com.hello.animalChat.dto.controller.FcmTokenDto;
-import com.hello.animalChat.dto.controller.MemberDto;
-import com.hello.animalChat.dto.controller.RequestMemberSettingChangeDto;
+import com.hello.animalChat.domain.member.Member;
+import com.hello.animalChat.dto.FcmTokenDto;
+import com.hello.animalChat.dto.member.MemberDto;
+import com.hello.animalChat.dto.member.MemberSettingChangeDto;
 import com.hello.animalChat.repository.FcmTokenRepository;
 import com.hello.animalChat.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +25,18 @@ public class MemberService {
 
     @Transactional
     public Long saveMember(MemberDto dto){
-        Long id = memberRepository.save(new Member(dto.getLoginType() , dto.getEmail() , dto.getPassword() ,
-                dto.getName() , dto.getMbti() , dto.getAnimal() , dto.getGender() , dto.getCreate_at()));
+        Long id = memberRepository.save(
+                Member.builder()
+                        .loginType(dto.getLoginType())
+                        .email(dto.getEmail())
+                        .password(dto.getPassword())
+                        .age(dto.getAge())
+                        .name(dto.getName())
+                        .mbti(dto.getMbti())
+                        .animal(dto.getAnimal())
+                        .gender(dto.getGender())
+                        .build()
+        );
 
         //토큰 저장
         fcmTokenRepository.save(new FcmTokenDto(id , dto.getToken()));
@@ -41,7 +51,7 @@ public class MemberService {
 
     public Member findMemberByEmail(String email , LoginType loginType){
         try {
-            return memberRepository.findByEmail(email , loginType).orElse(new Member());
+            return memberRepository.findByEmail(email , loginType).orElse(Member.builder().build());
         }catch (EmptyResultDataAccessException e){
             return null;
         }
@@ -49,7 +59,7 @@ public class MemberService {
     }
 
     @Transactional
-    public boolean changeMemberSetting(RequestMemberSettingChangeDto dto){
+    public boolean changeMemberSetting(MemberSettingChangeDto dto){
         try{
             memberRepository.updateMemberSetting(dto);
             return true;

@@ -1,15 +1,13 @@
 package com.hello.animalChat.repository;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import com.hello.animalChat.Enum.LoginType;
 
-import jakarta.persistence.Query;
 import org.springframework.stereotype.Repository;
-import com.hello.animalChat.domain.Member;
-import com.hello.animalChat.dto.controller.RequestMemberSettingChangeDto;
+import com.hello.animalChat.domain.member.Member;
+import com.hello.animalChat.dto.member.MemberSettingChangeDto;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -49,7 +47,7 @@ public class MemberRepository {
         }
     }
 
-    public void updateMemberSetting(RequestMemberSettingChangeDto dto){
+    public void updateMemberSetting(MemberSettingChangeDto dto){
         Member findUser = em.find(Member.class , dto.getChangeId());
         if(findUser==null){
             throw new NoSuchElementException("Setting을 변경할 멤버가 없습니다.");

@@ -2,6 +2,7 @@ package com.hello.animalChat.domain;
 
 import java.time.LocalDateTime;
 
+import com.hello.animalChat.domain.member.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 

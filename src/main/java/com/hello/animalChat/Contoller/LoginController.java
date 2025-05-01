@@ -4,8 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.external.fcm.FcmUtil;
-import com.hello.animalChat.dto.controller.LoginDto;
+import com.hello.animalChat.dto.LoginDto;
 import com.hello.animalChat.dto.response.ResponseLoginDto;
 import com.hello.animalChat.error.ErrorResult;
 import com.hello.animalChat.service.*;

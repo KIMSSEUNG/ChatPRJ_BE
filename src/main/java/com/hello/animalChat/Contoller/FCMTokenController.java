@@ -3,7 +3,7 @@ package com.hello.animalChat.Contoller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hello.animalChat.dto.controller.FcmTokenDto;
+import com.hello.animalChat.dto.FcmTokenDto;
 import com.hello.animalChat.service.FcmTokenService;
 
 import lombok.RequiredArgsConstructor;

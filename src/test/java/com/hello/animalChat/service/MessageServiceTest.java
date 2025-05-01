@@ -6,16 +6,14 @@ import com.hello.animalChat.domain.Message;
 import com.hello.animalChat.dto.response.ReceiveMessageResponseDto;
 import com.hello.animalChat.repository.MemberRepository;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.hello.animalChat.Enum.LoginType;
-import com.hello.animalChat.domain.Member;
+import com.hello.animalChat.domain.member.Member;
 
 @SpringBootTest
 @Transactional

@@ -1,4 +1,4 @@
-package com.hello.animalChat.dto.controller;
+package com.hello.animalChat.dto;
 
 import com.hello.animalChat.Enum.LoginType;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestEmailCheckDto {
+public class EmailCheckDto {
     private String email;
     private LoginType loginType;
 }

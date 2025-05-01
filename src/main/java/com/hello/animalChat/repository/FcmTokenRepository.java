@@ -3,7 +3,7 @@ package com.hello.animalChat.repository;
 import org.springframework.stereotype.Repository;
 
 import com.hello.animalChat.domain.Fcm.FcmToken;
-import com.hello.animalChat.dto.controller.FcmTokenDto;
+import com.hello.animalChat.dto.FcmTokenDto;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;

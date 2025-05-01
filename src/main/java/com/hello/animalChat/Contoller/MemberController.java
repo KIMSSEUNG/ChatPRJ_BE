@@ -1,8 +1,10 @@
 package com.hello.animalChat.Contoller;
 
-import com.hello.animalChat.domain.Member;
-import com.hello.animalChat.dto.controller.*;
-import com.hello.animalChat.service.FcmTokenService;
+import com.hello.animalChat.domain.member.Member;
+import com.hello.animalChat.dto.EmailCheckDto;
+import com.hello.animalChat.dto.member.MemberDto;
+import com.hello.animalChat.dto.member.MemberPWChangeDto;
+import com.hello.animalChat.dto.member.MemberSettingChangeDto;
 import com.hello.animalChat.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,7 +28,7 @@ public class MemberController {
 
     //조회지만 민감 정보를 담고 있음으로 POST 대체
     @PostMapping(value = "/member/email/exist")
-    public ResponseEntity EmailExist(@RequestBody RequestEmailCheckDto dto){
+    public ResponseEntity EmailExist(@RequestBody EmailCheckDto dto){
         Member findEmail = memberService.findMemberByEmail(dto.getEmail(), dto.getLoginType());
         if(findEmail==null)
         {
@@ -41,7 +43,7 @@ public class MemberController {
     }
 
     @PatchMapping(value = "/member/setting")
-    public ResponseEntity memberSettingChange(@RequestBody RequestMemberSettingChangeDto dto)
+    public ResponseEntity memberSettingChange(@RequestBody MemberSettingChangeDto dto)
     {
         boolean isChangeCheck = memberService.changeMemberSetting(dto);
         if(isChangeCheck)
@@ -57,7 +59,7 @@ public class MemberController {
     }
 
     @PatchMapping(value = "/member/pw")
-    public ResponseEntity memberPWChange(@RequestBody RequestMemberPWChangeDto dto)
+    public ResponseEntity memberPWChange(@RequestBody MemberPWChangeDto dto)
     {
         boolean isChangeCheck = memberService.changeMemberPW(dto.getId(), dto.getChangePW());
         if(isChangeCheck)

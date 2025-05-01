@@ -1,4 +1,4 @@
-package com.hello.animalChat.dto.controller;
+package com.hello.animalChat.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

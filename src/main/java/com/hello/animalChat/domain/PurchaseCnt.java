@@ -1,4 +1,5 @@
 package com.hello.animalChat.domain;
+import com.hello.animalChat.domain.member.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 

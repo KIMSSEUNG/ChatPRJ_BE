@@ -1,4 +1,4 @@
-package com.hello.animalChat.dto.controller;
+package com.hello.animalChat.dto.member;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestMemberPWChangeDto {
+public class MemberPWChangeDto {
     private Long id;
     private String changePW;
 }

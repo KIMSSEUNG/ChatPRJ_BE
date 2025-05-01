@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# 🔒 Firebase 서비스 계정 키 무시
+src/main/resources/firebase/*.json

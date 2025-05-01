@@ -1,6 +1,7 @@
 package com.hello.animalChat.repository;
 
-import com.hello.animalChat.domain.Member;
+import com.hello.animalChat.dto.message.MessageDto;
+import com.hello.animalChat.dto.message.NewMessageDto;
 import org.springframework.stereotype.Repository;
 
 import com.hello.animalChat.domain.Message;
@@ -43,5 +44,30 @@ public class MessageRepository {
             .setParameter("time", lastReceiveTime)
             .getResultList();
         return findMessage;
-    }   
+    }
+
+    public Long newRandomId(NewMessageDto dto) {
+
+        String jpql = "Select m.id From Member m" +
+                " Where m.id not in" +
+                " (SELECT c.partnerId FROM ChatPartner c" +
+                "   Where c.userId=:id )" +
+                " And m.gender=:gender" +
+                " And m.age Between :low and :high";
+        List<Long> partner= em.createQuery(jpql , Long.class)
+                .setParameter("id",dto.getSenderId())
+                .setParameter("gender",dto.getGender())
+                .setParameter("low",dto.getMinAge())
+                .setParameter("high",dto.getMaxAge())
+                .getResultList();
+
+        if(partner.size()==0)
+            return 0L;
+
+        //랜덤 뽑기 생성
+        Random rand = new Random();
+        Long randomId = partner.get(rand.nextInt(partner.size()));
+
+        return randomId;
+    }
 }

@@ -1,4 +1,4 @@
-package com.hello.animalChat.dto.controller;
+package com.hello.animalChat.dto.member;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hello.animalChat.Enum.LoginType;
@@ -17,6 +17,7 @@ public class MemberDto {
     private String email;
     private String password;
     private String name;
+    private String age;
     private String mbti;
     private String animal;
     private String token;
