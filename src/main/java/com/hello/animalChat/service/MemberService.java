@@ -2,13 +2,15 @@ package com.hello.animalChat.service;
 
 import com.hello.animalChat.Enum.LoginType;
 import com.hello.animalChat.domain.member.Member;
-import com.hello.animalChat.dto.FcmTokenDto;
+import com.hello.animalChat.dto.fcm.FCMDto;
 import com.hello.animalChat.dto.member.MemberDto;
 import com.hello.animalChat.dto.member.MemberSettingChangeDto;
-import com.hello.animalChat.repository.FcmTokenRepository;
+import com.hello.animalChat.repository.FCMRepository;
 import com.hello.animalChat.repository.MemberRepository;
+import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -21,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final FcmTokenRepository fcmTokenRepository;
+    private final FCMRepository fcmTokenRepository;
 
     @Transactional
     public Long saveMember(MemberDto dto){
@@ -35,38 +37,45 @@ public class MemberService {
                         .mbti(dto.getMbti())
                         .animal(dto.getAnimal())
                         .gender(dto.getGender())
+                        .create_at(LocalDateTime.now())
                         .build()
         );
 
         //토큰 저장
-        fcmTokenRepository.save(new FcmTokenDto(id , dto.getToken()));
+        fcmTokenRepository.save(new FCMDto(id , dto.getToken()));
 
         return id;
     }
 
+    public Member findReferenceById(Long id) {
+        return memberRepository.getReferenceById(id);
+    }
+
     public Member findMemberById(Long id){
-        return memberRepository.findById(id);
+        Member m =memberRepository.findById(id);
+        if(m!=null){
+            return m;
+        }
+        else{
+            throw new NoResultException();
+        }
+
     }
 
 
     public Member findMemberByEmail(String email , LoginType loginType){
-        try {
-            return memberRepository.findByEmail(email , loginType).orElse(Member.builder().build());
-        }catch (EmptyResultDataAccessException e){
-            return null;
+        Member m = memberRepository.findByEmail(email , loginType);
+        if(m!=null){
+            return m;
         }
-
+        else{
+            throw new NoResultException();
+        }
     }
 
     @Transactional
     public boolean changeMemberSetting(MemberSettingChangeDto dto){
-        try{
-            memberRepository.updateMemberSetting(dto);
-            return true;
-        }catch(NoSuchElementException e){
-            e.printStackTrace();
-            return false;
-        }
+        return memberRepository.updateMemberSetting(dto);
     }
 
     @Transactional
@@ -74,7 +83,7 @@ public class MemberService {
         try{
             memberRepository.updateMemberPW(memberId , pw);
             return true;
-        }catch(NoSuchElementException e){
+        }catch(NoResultException e){
             e.printStackTrace();
             return false;
         }

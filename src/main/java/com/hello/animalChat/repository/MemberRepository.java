@@ -5,12 +5,13 @@ import java.util.Optional;
 
 import com.hello.animalChat.Enum.LoginType;
 
+import jakarta.persistence.NoResultException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import com.hello.animalChat.domain.member.Member;
 import com.hello.animalChat.dto.member.MemberSettingChangeDto;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,44 +24,52 @@ public class MemberRepository {
     
 
     public Long save(Member member){
-        member.setCreateAt(LocalDateTime.now());
         em.persist(member);
         return member.getId();
     }
 
     public Member findById(Long id){
-        Member find = em.find(Member.class,id);
-        return find;
+        return em.find(Member.class,id);
+    }
+
+    // 지연 로딩 프록시 반환 (getReferenceById와 동일한 역할)
+    public Member getReferenceById(Long id) {
+        return em.getReference(Member.class, id);
     }
 
     //이메일을 통한 정보 등록 확인
-    public Optional<Member> findByEmail(String email , LoginType type){
-        try{
-            String jpql = "SELECT u FROM Member u WHERE u.email = :email AND u.loginType = :type";
-            Member member = em.createQuery(jpql, Member.class)
-                .setParameter("email", email) 
+    public Member findByEmail(String email , LoginType type){
+
+        String jpql = "SELECT u FROM Member u WHERE u.email = :email AND u.loginType = :type";
+        Member member = em.createQuery(jpql, Member.class)
+                .setParameter("email", email)
                 .setParameter("type", type)
                 .getSingleResult();
-            return Optional.of(member);
-        }catch(NoResultException e){
-            throw new NoResultException("해당하는 이메일이 없습니다.");
-        }
+        return member;
+
     }
 
-    public void updateMemberSetting(MemberSettingChangeDto dto){
+    public boolean updateMemberSetting(MemberSettingChangeDto dto){
         Member findUser = em.find(Member.class , dto.getChangeId());
-        if(findUser==null){
-            throw new NoSuchElementException("Setting을 변경할 멤버가 없습니다.");
+        if(findUser!=null){
+            findUser.changeMemberSetting(dto);
+            return true;
         }
-        findUser.changeMemberSetting(dto);
+        else{
+            return false;
+        }
     }
 
-    public void updateMemberPW(Long memberId , String pw){
+    public boolean updateMemberPW(Long memberId , String pw){
         Member findUser = em.find(Member.class , memberId);
-        if(findUser==null){
-            throw new NoSuchElementException("Password를 변경할 멤버가 없습니다.");
+        if(findUser!=null){
+            findUser.changeMemberPW(pw);
+            return true;
         }
-        findUser.changeMemberPW(pw);
+        else{
+            return false;
+        }
+
     }
 
     public void deleteMember(Long memberId){

@@ -1,9 +1,11 @@
 package com.hello.animalChat.error;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.GenericJDBCException;
 import org.hibernate.exception.JDBCConnectionException;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 @Slf4j
+@Hidden
 public class GlobalExceptionHandler {
 
     //데이터 접근 관련 에러
@@ -24,7 +27,7 @@ public class GlobalExceptionHandler {
                 ));
     }
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler({Exception.class , EmptyResultDataAccessException.class})
     public ResponseEntity<ErrorResult> handleException(DataAccessException e) {
         log.error("에러 발생", e);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -33,5 +36,10 @@ public class GlobalExceptionHandler {
                         "에러 발생"
                 ));
     }
+
+
+
+
+
 }
 

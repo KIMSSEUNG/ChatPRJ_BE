@@ -3,15 +3,21 @@ import java.time.LocalDateTime;
 
 import com.hello.animalChat.domain.Message;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import java.util.*;
 import com.hello.animalChat.Enum.*;
 import com.hello.animalChat.dto.member.MemberSettingChangeDto;
+import lombok.NoArgsConstructor;
 import org.springframework.cglib.core.Local;;
 
 
 @Entity
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class ChatPartner {
 
     @Id
@@ -20,15 +26,6 @@ public class ChatPartner {
     private Long userId;
     private Long partnerId;
     private LocalDateTime created_at;
-
-    public ChatPartner(){}
-
-    public ChatPartner(Long id, Long userId, Long partnerId, LocalDateTime created_at) {
-        this.id = id;
-        this.userId = userId;
-        this.partnerId = partnerId;
-        this.created_at = created_at;
-    }
 
     @Override
     public String toString() {

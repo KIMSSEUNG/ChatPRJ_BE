@@ -1,13 +1,17 @@
-package com.hello.animalChat.dto;
+package com.hello.animalChat.dto.fcm;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FcmTokenDto {
+@Builder
+public class FCMDto {
+
     private Long userId;
     private String token;
+
 }

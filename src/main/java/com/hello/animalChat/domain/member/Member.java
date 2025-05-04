@@ -33,7 +33,7 @@ public class Member {
     private String email;
     private String password;
     private String name;
-    private String age;
+    private int age;
     @Column(length = 4)
     private String mbti;
     @Column(length = 20)
@@ -55,7 +55,6 @@ public class Member {
     public void changeMemberSetting(MemberSettingChangeDto dto){
         this.mbti=dto.getMbti();
         this.animal=dto.getAnimal();
-        this.gender=dto.getGender();
     }
 
 }

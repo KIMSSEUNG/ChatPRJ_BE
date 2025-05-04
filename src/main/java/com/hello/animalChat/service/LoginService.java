@@ -16,12 +16,8 @@ public class LoginService {
     
     private final LoginRepository LoginRepository;
 
-    public ResponseLoginDto loginBasic(LoginDto dto){
-        return LoginRepository.loginBasic(dto);
-    }
-
-    public ResponseLoginDto loginGoogle(LoginDto dto){
-        return LoginRepository.loginGoogle(dto);
+    public ResponseLoginDto login(LoginDto dto){
+        return LoginRepository.login(dto);
     }
 
 }

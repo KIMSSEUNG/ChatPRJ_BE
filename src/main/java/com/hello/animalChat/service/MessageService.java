@@ -1,9 +1,13 @@
 package com.hello.animalChat.service;
+import com.hello.animalChat.domain.member.ChatPartner;
 import com.hello.animalChat.domain.member.Member;
 import com.hello.animalChat.domain.Message;
 import com.hello.animalChat.dto.message.MessageDto;
 import com.hello.animalChat.dto.message.NewMessageDto;
 import com.hello.animalChat.dto.response.*;
+import com.hello.animalChat.repository.ChatPartnerRepository;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -14,6 +18,7 @@ import com.hello.animalChat.repository.MessageRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -22,10 +27,33 @@ public class MessageService {
 
     private final MessageRepository messageRepository;
     private final MemberRepository memberRepository;
+    private final ChatPartnerService chatService;
+
 
     @Transactional
-    public void savaMessage(Message message){
-        messageRepository.save(message);
+    public Long savaMessage(MessageDto dto , LocalDateTime time) {
+        try {
+            Member sender = memberRepository.getReferenceById(dto.getSenderId());
+            Member receiver = memberRepository.getReferenceById(dto.getReceiverId());
+            Message message =  new Message(sender,receiver,dto.getMessage(),time);
+            Long id = messageRepository.save(message);
+            //파트너 저장
+            chatService.save(dto.getSenderId() , dto.getReceiverId());
+            chatService.save(dto.getReceiverId() , dto.getSenderId());
+            return id;
+        }catch (DataIntegrityViolationException e){
+            e.printStackTrace();
+            //외래키 위반
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public Message findById(Long id){
+        return messageRepository.findById(id);
+    }
+
+    public Long randorMatch(NewMessageDto dto) {
+        return messageRepository.newRandomId(dto);
     }
 
     //회원의 모든 메세지를 찾기 위한 기능
@@ -82,19 +110,9 @@ public class MessageService {
 
     }
 
-    public Long RandomId(NewMessageDto dto) {
-        return messageRepository.newRandomId(dto);
-    }
 
-    @Transactional
-    public void savaMessage(MessageDto dto) {
-        Member sender = memberRepository.findById(dto.getSenderId());
-        Member receiver = memberRepository.findById(dto.getReceiverId());
-        
-        Message message =  new Message(sender,receiver,dto.getMessage(),LocalDateTime.now());
 
-        messageRepository.save(message);
-    }
+
 
 
 }

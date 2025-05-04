@@ -17,9 +17,9 @@ public class MessageRepository {
 
     private final EntityManager em;
 
-    public Message save(Message m){
+    public Long save(Message m){
         em.persist(m);
-        return m;
+        return m.getId();
     }
 
     public List<Message> findByReceiveAllMessage(Long id){
@@ -48,12 +48,16 @@ public class MessageRepository {
 
     public Long newRandomId(NewMessageDto dto) {
 
-        String jpql = "Select m.id From Member m" +
-                " Where m.id not in" +
-                " (SELECT c.partnerId FROM ChatPartner c" +
-                "   Where c.userId=:id )" +
-                " And m.gender=:gender" +
-                " And m.age Between :low and :high";
+        String jpql = """
+                SELECT m.id FROM Member m 
+                WHERE NOT EXISTS (
+                    SELECT c.partnerId FROM ChatPartner c 
+                    WHERE c.userId = :id AND c.partnerId = m.id 
+                )
+                AND m.gender = :gender 
+                AND m.id != :id 
+                AND m.age BETWEEN :low AND :high
+                """;
         List<Long> partner= em.createQuery(jpql , Long.class)
                 .setParameter("id",dto.getSenderId())
                 .setParameter("gender",dto.getGender())
@@ -69,5 +73,9 @@ public class MessageRepository {
         Long randomId = partner.get(rand.nextInt(partner.size()));
 
         return randomId;
+    }
+
+    public Message findById(Long id) {
+        return em.find(Message.class,id);
     }
 }

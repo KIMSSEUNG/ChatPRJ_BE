@@ -2,79 +2,190 @@ package com.hello.animalChat.service;
 
 import com.hello.animalChat.Enum.LoginType;
 import com.hello.animalChat.domain.member.Member;
-
 import com.hello.animalChat.dto.member.MemberDto;
 import com.hello.animalChat.dto.member.MemberSettingChangeDto;
-import com.hello.animalChat.repository.MemberRepository;
-import jakarta.transaction.Transactional;
-
-import org.assertj.core.api.Assertions;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.NoResultException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
 class MemberServiceTest {
 
     @Autowired
-    MemberRepository memberRepository;
+    private MemberService memberService;
     @Autowired
-    MemberService memberService;
-    Long testID=0L;
-    
-    @BeforeEach
-    void beforeEach() {
-        Member member = new Member(LoginType.GOOGLE, "tmdgh12345" ,"12345","ENFG","고양이",'남', LocalDateTime.now());
-        memberRepository.save(member);
-        testID = member.getId();
-    }
-    
-    
+    EntityManager em;
 
 
     @Test
     void saveMember() {
-        Member member = new Member( LoginType.GOOGLE, "tmdgh" ,"12345","ENFG","고양이",'남',
-                LocalDateTime.now());
-        MemberDto dto = new MemberDto("tmdgh" ,"12345" , LoginType.GOOGLE,"ENFG","고양이",'남', LocalDateTime.now());
-        Long id = memberService.saveMember(dto);
+        MemberDto m = MemberDto.builder()
+                .loginType(LoginType.BASIC)     // 예: BASIC, GOOGLE 등
+                .email("example@example.com")
+                .password("securePassword123")
+                .name("홍길동")
+                .age(25)
+                .mbti("INTJ")
+                .animal("고양이")
+                .token("abc123xyzToken")
+                .gender('M')
+                .create_at(LocalDateTime.now())
+                .build();
 
-        Member find = memberService.findMemberById(id);
-        Assertions.assertThat(member.getId()).isEqualTo(find.getId());
+        memberService.saveMember(m);
+        Assertions.assertThrows( DataIntegrityViolationException.class ,() -> memberService.saveMember(m));
+
+    }
+
+    @Test
+    void findMemberById() {
+        MemberDto m = MemberDto.builder()
+                .loginType(LoginType.BASIC)     // 예: BASIC, GOOGLE 등
+                .email("example@example.com")
+                .password("securePassword123")
+                .name("홍길동")
+                .age(25)
+                .mbti("INTJ")
+                .animal("고양이")
+                .token("abc123xyzToken")
+                .gender('M')
+                .create_at(LocalDateTime.now())
+                .build();
+
+        Long id = memberService.saveMember(m);
+        Assertions.assertEquals(id , memberService.findMemberById(id).getId());
+        Assertions.assertThrows(NoResultException.class,()->memberService.findMemberById(id*50));
 
     }
 
     @Test
     void findMemberByEmail() {
-        Member find = memberService.findMemberByEmail("tmdgh12345",LoginType.GOOGLE);
-        Assertions.assertThat(find.getEmail()).isEqualTo("tmdgh12345");
-        //없을 경우
-        Member find2 = memberService.findMemberByEmail("gh12345",LoginType.GOOGLE);
-        Assertions.assertThat(find2.getEmail()).isEqualTo(null);
+        MemberDto m = MemberDto.builder()
+                .loginType(LoginType.BASIC)     // 예: BASIC, GOOGLE 등
+                .email("example@example.com")
+                .password("securePassword123")
+                .name("홍길동")
+                .age(25)
+                .mbti("INTJ")
+                .animal("고양이")
+                .token("abc123xyzToken")
+                .gender('M')
+                .create_at(LocalDateTime.now())
+                .build();
 
+        Long id = memberService.saveMember(m);
+        Assertions.assertEquals("example@example.com" , memberService.findMemberByEmail("example@example.com" , LoginType.BASIC).getEmail());
+        Assertions.assertThrows(NoResultException.class,()->memberService.findMemberById(id*50));
     }
 
     @Test
-    void updateMember() {
-        MemberSettingChangeDto dto = new MemberSettingChangeDto(1L,"ENFJ", "cat", '여');
+    void findReferenceById(){
+        MemberDto m = MemberDto.builder()
+                .loginType(LoginType.BASIC)     // 예: BASIC, GOOGLE 등
+                .email("example@example.com")
+                .password("securePassword123")
+                .name("홍길동")
+                .age(25)
+                .mbti("INTJ")
+                .animal("고양이")
+                .token("abc123xyzToken")
+                .gender('M')
+                .create_at(LocalDateTime.now())
+                .build();
+
+        Long id = memberService.saveMember(m);
+        em.clear();
+        // reference 확인
+        //Assertions.assertEquals(id , memberService.findMemberById(id).getId());
+        Assertions.assertEquals(id , memberService.findReferenceById(id).getId());
+
+        Assertions.assertThrows(EntityNotFoundException.class,()->memberService.findReferenceById(id*50).getEmail());
+    }
+
+
+    @Test
+    void changeMemberSetting() {
+        MemberDto m = MemberDto.builder()
+                .loginType(LoginType.BASIC)     // 예: BASIC, GOOGLE 등
+                .email("example@example.com")
+                .password("securePassword123")
+                .name("홍길동")
+                .age(25)
+                .mbti("INTJ")
+                .animal("고양이")
+                .token("abc123xyzToken")
+                .gender('M')
+                .create_at(LocalDateTime.now())
+                .build();
+
+        Long id = memberService.saveMember(m);
+        MemberSettingChangeDto dto = MemberSettingChangeDto.builder()
+                .changeId(id)
+                .animal("곰")
+                .mbti("INFJ").build();
         memberService.changeMemberSetting(dto);
-        memberService.entityManagerClear();
-        Member find = memberService.findMemberById(dto.getChangeId());
-        Assertions.assertThat(find.getAnimal()).isEqualTo("cat");
+        Member find =memberService.findMemberById(id);
+
+        Assertions.assertEquals("곰" , find.getAnimal());
+        dto.setChangeId(id*50);
+        Assertions.assertEquals(false, memberService.changeMemberSetting(dto));
+    }
+
+    @Test
+    void changeMemberPW() {
+        MemberDto m = MemberDto.builder()
+                .loginType(LoginType.BASIC)     // 예: BASIC, GOOGLE 등
+                .email("example@example.com")
+                .password("securePassword123")
+                .name("홍길동")
+                .age(25)
+                .mbti("INTJ")
+                .animal("고양이")
+                .token("abc123xyzToken")
+                .gender('M')
+                .create_at(LocalDateTime.now())
+                .build();
+
+        Long id = memberService.saveMember(m);
+        memberService.changeMemberPW(id,"1234");
+        Member find =memberService.findMemberById(id);
+        Assertions.assertEquals("1234" , find.getPassword());
     }
 
     @Test
     void deleteMember() {
-        System.out.println("delete Test");
-        Member m = memberService.findMemberById(testID);
-        Assertions.assertThat(m.getEmail()).isEqualTo("tmdgh12345");
-        memberService.deleteMember(testID);
-        Member m2 = memberService.findMemberById(testID);
-        Assertions.assertThat(m2).isEqualTo(null);
-        
+
+        MemberDto m = MemberDto.builder()
+                .loginType(LoginType.BASIC)     // 예: BASIC, GOOGLE 등
+                .email("example@example.com")
+                .password("securePassword123")
+                .name("홍길동")
+                .age(25)
+                .mbti("INTJ")
+                .animal("고양이")
+                .token("abc123xyzToken")
+                .gender('M')
+                .create_at(LocalDateTime.now())
+                .build();
+
+        Long id = memberService.saveMember(m);
+        memberService.deleteMember(id);
+        Assertions.assertThrows(NoResultException.class,()->memberService.findMemberById(id));
     }
+
 }
